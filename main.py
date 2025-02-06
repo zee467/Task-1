@@ -59,8 +59,3 @@ def create_app():
             return jsonify(number_details), 200
         
     return app
-
-
-if __name__ == "__main__":
-    app = create_app()
-    app.run()
