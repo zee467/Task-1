@@ -41,12 +41,12 @@ def create_app():
     @app.route("/api/classify_number")
     def get_num_details():
         number = request.args.get("number")
-        if not number.isnumeric():
+        if not str(number).isdigit():
             return jsonify({
                 "number": "alphabet",
                 "error": True
             }), 400
-        if number:
+        else:
             number = int(number)
             number_details = {
                 "number": number,
