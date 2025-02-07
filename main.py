@@ -41,21 +41,29 @@ def create_app():
     @app.route("/api/classify_number")
     def get_num_details():
         number = request.args.get("number")
-        if not str(number).isdigit():
+
+        try:
+            # Try converting to float
+            float_val = float(number)
+
+            if float_val.is_integer():
+                parsed_value = int(float_val)
+            else:
+                parsed_value = float_val
+            
+            number_details = {
+                "number": parsed_value,
+                "is_prime": is_prime(int(parsed_value)),
+                "is_perfect": is_perfect(int(parsed_value)),
+                "properties": [is_armstrong(int(parsed_value)), even_or_odd(int(parsed_value))],
+                "digit_sum": digitsum(int(parsed_value)),
+                "fun_fact": number_api(int(parsed_value))
+                }
+            return jsonify(number_details), 200
+        except ValueError:
             return jsonify({
                 "number": "alphabet",
                 "error": True
-            }), 400
-        else:
-            number = int(number)
-            number_details = {
-                "number": number,
-                "is_prime": is_prime(number),
-                "is_perfect": is_perfect(number),
-                "properties": [is_armstrong(number), even_or_odd(number)],
-                "digit_sum": digitsum(number),
-                "fun_fact": number_api(number)
-                }
-            return jsonify(number_details), 200
-        
+            }), 400        
+               
     return app
