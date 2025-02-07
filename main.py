@@ -55,9 +55,9 @@ def create_app():
 
             number_details = {
                 "number": parsed_value,
-                "is_prime": is_prime(int(parsed_value)) if is_integer and parsed_value >= 0 else None,
-                "is_perfect": is_perfect(int(parsed_value)) if is_integer and parsed_value >= 0 else None,
-                "properties": list(filter(None, [is_armstrong(int(parsed_value)) if is_integer else None, even_or_odd(int(parsed_value))])),
+                "is_prime": is_prime(int(parsed_value)) if is_integer and parsed_value >= 0 else False,
+                "is_perfect": is_perfect(int(parsed_value)) if is_integer and parsed_value >= 0 else False,
+                "properties": list(filter(None, [is_armstrong(int(parsed_value)) if is_integer else False, even_or_odd(int(parsed_value))])),
                 "digit_sum": digitsum(parsed_value) if is_integer else None,
                 "fun_fact": number_api(parsed_value) if is_integer else "Fun facts are available for integers only."
             }
