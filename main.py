@@ -19,20 +19,19 @@ def is_perfect(num):
 
 
 def digitsum(num):
-    return sum(int(digit) for digit in str(num))
+    return sum(int(digit) for digit in str(abs(int(num))))
 
 def is_armstrong(num):
     str_digit = str(abs(int(num)))
     power = len(str_digit)
     
-    if sum(int(digit) ** power for digit in str_digit) == num:
+    if sum(int(digit) ** power for digit in str_digit) == abs(num):
         return "armstrong"
     return None
 
 def even_or_odd(num):
-    if num % 2 == 0:
-        return "even"
-    return "odd"
+    return "even" if num % 2 == 0 else "odd"
+
 
 def create_app():
     app = Flask(__name__)
@@ -51,14 +50,17 @@ def create_app():
             else:
                 parsed_value = float_val
             
+            # Determine if integer-based properties should be calculate
+            is_integer = isinstance(parsed_value, int) or float_val.is_integer()
+
             number_details = {
                 "number": parsed_value,
-                "is_prime": is_prime(is_prime(int(parsed_value)) if parsed_value >= 0 else False),
-                "is_perfect": is_perfect(int(parsed_value)) if parsed_value >= 0 else False,
-                "properties": list(filter(None, [is_armstrong(int(parsed_value)), even_or_odd(int(parsed_value))])),
-                "digit_sum": digitsum(parsed_value),
-                "fun_fact": number_api(parsed_value) if isinstance(parsed_value, int) else "Fun facts are available for integers only."
-                }
+                "is_prime": is_prime(int(parsed_value)) if is_integer and parsed_value >= 0 else None,
+                "is_perfect": is_perfect(int(parsed_value)) if is_integer and parsed_value >= 0 else None,
+                "properties": list(filter(None, [is_armstrong(int(parsed_value)) if is_integer else None, even_or_odd(int(parsed_value))])),
+                "digit_sum": digitsum(parsed_value) if is_integer else None,
+                "fun_fact": number_api(parsed_value) if is_integer else "Fun facts are available for integers only."
+            }
             return jsonify(number_details), 200
         except ValueError:
             return jsonify({
