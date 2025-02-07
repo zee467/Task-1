@@ -9,10 +9,10 @@ def is_prime(num):
     for i in range(2, int(num)):
         if num % i == 0:
             return False
-    return True
+    return False
 
 def is_perfect(num):
-    if num < 0:
+    if num < 1:
         return False
     divisors = [i for i in range(1, num) if num % i == 0]
     return sum(divisors) == num
